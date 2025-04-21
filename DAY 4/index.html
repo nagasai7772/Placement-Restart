@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    const people = [
+      {
+        Employee: "Alice",
+        salary: 50000,
+        bonus: 5000,
+      },
+      {
+        Employee: "Charlie",
+        salary: 60000,
+        bonus: 6000,
+      },
+      {
+        Employee: "Bob",
+        salary: 45000,
+        bonus: 4500,
+      },
+    ];
+
+    const latestEmployees = [];
+    const employeeDetails = people.map((ele, index) => {
+      if (ele.salary > 45000) {
+        console.log(
+          `${ele.Employee } earns ${ele.salary} and got a bonus of ${ele.bonus}`
+        );
+        latestEmployees.push(ele);
+      }
+    });
+    let employeeBonus = [];
+    let printdetails = function () {
+      
+    };
+    latestEmployees.filter((val) => {
+      printdetails.call(val);
+      employeeBonus.push(val.bonus);
+    });
+    let printBonus = employeeBonus.reduce((acc, cur) => {
+      return acc+cur
+    });
+    console.log(`Total Bonus given ${printBonus}`);
+    
+    
+  </script>
+</html>
