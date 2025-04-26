@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+<body>
+  <input type="text" id="search" placeholder="Search products..." />
+
+  <script>
+    let search = document.getElementById("search");
+    let products = null;
+
+    
+    fetch("https://fakestoreapi.com/products")
+      .then((res) => res.json())
+      .then((data) => {
+        products = data;
+      })
+      .catch((err) => console.log(err));
+
+    
+    function myDebounce(fun, delay) {
+      let timer;
+      return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          fun(...args);
+        }, delay);
+      };
+    }
+
+    
+    function myThrottle(fun, delay) {
+      let lastCall = 0;
+      return function (...args) {
+        let now = new Date().getTime();
+        if (now - lastCall < delay) return;
+        lastCall = now;
+        return fun(...args);
+      };
+    }
+
+    
+    const fetchProducts = () => {
+      console.log("Fetching all products...");
+      console.log(products?.map((p) => p.title));
+    };
+
+    
+    const handleKeyPress = (event) => {
+      let currentInput = search.value;
+      let lastKey = event.data; 
+
+      if (!products) return;
+
+      let isMatch = products.some((product) =>
+        product.title.toLowerCase().includes(currentInput.toLowerCase())
+      );
+
+      if (isMatch && lastKey) {
+        console.log("Matching Key Pressed:", lastKey);
+      }
+    };
+
+    
+    let debouncedFetch = myDebounce(fetchProducts, 500);
+    let throttledKeyPress = myThrottle(handleKeyPress, 300);
+
+    
+    search.addEventListener("input", (event) => {
+      debouncedFetch();
+      throttledKeyPress(event);
+    });
+  </script>
+</body>
+</html> 
+
+
+
+

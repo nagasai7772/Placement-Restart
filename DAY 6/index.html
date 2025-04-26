@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to right, #83a4d4, #b6fbff);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      div {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      input[type="text"] {
+        padding: 10px;
+        width: 200px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+        margin-right: 10px;
+      }
+
+      button {
+        padding: 10px 20px;
+        background-color: #0077ff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #005dc1;
+      }
+
+      p {
+        font-size: 18px;
+        margin: 10px 0;
+      }
+
+      #err {
+        color: red;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <input type="text" name="" id="search" />
+      <button id="search_btn" onclick="weather()">search</button>
+    </div>
+    <div>
+      <p id="temp">Temperature:--</p>
+      <p id="desc">Description:--</p>
+      <p id="err"></p>
+      <p></p>
+    </div>
+  </body>
+  <script>
+    async function weather() {
+      let search = document.getElementById("search").value;
+      let temp = document.getElementById("temp");
+      let desc = document.getElementById("desc");
+      let err = document.getElementById("err");
+
+      try {
+        let weatherdata = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?q=${search}&units=metric&appid=466ddaa21a8de191e9f608bd11a56acb`
+        );
+        let jsondata = await weatherdata.json();
+        if (search.length > 0) {
+          temp.style.display = "block";
+          desc.style.display = "block";
+          temp.innerText = "Temperature:" + jsondata?.main.temp + "°C ";
+          desc.innerText = "Description:" + jsondata?.weather[0].description;
+          err.innerHTML = "";
+        } else {
+          temp.style.display = "none";
+          desc.style.display = "none";
+          err.innerHTML = "No Cities Found";
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  </script>
+</html>
