@@ -87,7 +87,7 @@
       <button onClick="register()">Register</button>
     </div>
     </div>
-    <div id="login" style="display: none">
+    <div id="login" >
       <h1>Login</h1>
       <input type="text" id="username2" />
       <input type="text" id="pass2" />
@@ -115,7 +115,8 @@
         }
         users[username1] = { password: pass1, todo: [] };
         currentuser = username1;
-       
+       alert(`${currentuser}  registeration Successfully completed`)
+       document.getElementById('register').style.display='none'
         savedata();
       }
 
@@ -134,6 +135,7 @@
         }
         currentuser = username2;
         savedata();
+        alert(`${currentuser}  logging to Your Account`)
         document.getElementById("register").style.display = "none";
         document.getElementById("login").style.display = "none";
         document.getElementById("todo").style.display = "block";
@@ -173,6 +175,7 @@
         displaytodos();
       }
       function logoutButton() {
+        alert(`${currentuser} you are Logged out`)
         localStorage.removeItem("currentuser");
         document.getElementById("register").style.display = "block";
         document.getElementById("login").style.display = "block";
