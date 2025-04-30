@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1 id="displayUser"></h1>
+    <button id="resetBtn">RESET to new user</button>
+
+    <script>
+      let userData = {
+        username: ""
+      };
+
+      let visitData = {
+        visitCount: 0
+      };
+
+      userData.__proto__ = visitData;
+
+      let displayUser = document.getElementById("displayUser");
+      let resetBtn = document.getElementById("resetBtn");
+
+      if (localStorage.getItem("storedUser")) {
+        let storedName = JSON.parse(localStorage.getItem("storedUser"));
+        let visitNumber = trackVisits();
+        displayUser.textContent = `HELLO ${storedName} THIS IS YOUR ${visitNumber} VISIT`;
+      } else {
+        window.location.reload();
+        let userInput = prompt("Enter your name:");
+        let upperName = userInput.toUpperCase();
+        userData.username = upperName;
+        localStorage.setItem("storedUser", JSON.stringify(userData.username));
+      }
+
+      function getCookieValue(cookieName) {
+        const decoded = decodeURIComponent(document.cookie);
+        let parts = decoded.split("=");
+        return Number(parts[1]);
+      }
+
+      function setCookieValue(cookieName, cookieValue, validityDays) {
+        const now = new Date();
+        now.setTime(now.getTime() + validityDays * 24 * 60 * 60 * 1000);
+        let expires = "";
+        document.cookie = `${cookieName}=${cookieValue}; ${expires}; path=/`;
+      }
+
+      function clearCookie(cookieName) {
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      }
+
+      function trackVisits() {
+        userData.visitCount = getCookieValue("visitCookie");
+
+        if (userData.visitCount) {
+          userData.visitCount = parseInt(userData.visitCount) + 1;
+        } else {
+          userData.visitCount = 1;
+        }
+
+        setCookieValue("visitCookie", userData.visitCount, 30);
+        console.log("Login count:", userData.visitCount);
+        return userData.visitCount;
+      }
+
+      resetBtn.addEventListener("click", () => {
+        localStorage.clear();
+        clearCookie("visitCookie");
+        window.location.reload();
+      });
+    </script>
+  </body>
+</html>
